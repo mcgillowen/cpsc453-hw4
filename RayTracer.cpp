@@ -31,27 +31,37 @@ Object * RayTracer::intersect(Ray r){
 // Trace a ray recursively
 Color RayTracer::trace(Ray r, int depth){
   Color rad=Color(0.0,0.0,0.0,0.0);
-  
+
   // YOUR CODE FOR RECURSIVE RAY TRACING GOES HERE
-  
+
+  Object *obj = this->intersect(r);
+  if (obj == NULL) return rad;
+
+  Point pt = obj->getIntersection(r);
+  Point normal = obj->getNormal(pt);
+
+  rad.r = normal.x;
+  rad.g = normal.y;
+  rad.b = normal.z;
+
   return rad;
 }
 
 // Local Phong illumination at a point.
 Color RayTracer::Phong(Point normal,Point p, Ray r, Material * m, Object * o){
   Color ret = Color(0.0, 0.0, 0.0, 0.0);
-  
+
   // YOUR CODE HERE.
   // There is ambient lighting irrespective of shadow.
   // Specular-diffuse lighting only if the point is not in shadow
-  
+
   // Remember, you need to account for all the light sources.
-  
+
   return ret;
 }
 
 
-// This function generates point on the image plane and starts a trace 
+// This function generates point on the image plane and starts a trace
 // through them.
 // Grid supersampling is also implemented.
 Color RayTracer::calculate(int x, int y){
@@ -70,4 +80,3 @@ Color RayTracer::calculate(int x, int y){
   c = c*(1.0/double(samples*samples));
   return c;
 }
-
