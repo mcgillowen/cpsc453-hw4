@@ -44,6 +44,8 @@ Point Triangle::getIntersection(Ray r){
 
 	// YOUR INTERSECTION CODE HERE.
 	// RETURN THE POINT OF INTERSECTION FOR THIS TRIANGLE.
+    float t, u, v;
+    
 
 
     return Point::Infinite();
@@ -65,9 +67,6 @@ Point Sphere::getNormal(Point p){
 }
 
 Point Sphere::getIntersection(Ray r){
-
-	// YOUR INTERSECTION CODE HERE.
-	// RETURN THE POINT OF INTERSECTION FOR THIS SPHERE.
 
     float t0, t1;
     float a = r.v * r.v;
