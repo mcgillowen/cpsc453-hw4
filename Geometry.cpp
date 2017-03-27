@@ -6,7 +6,7 @@ Point Point::Infinite(){
     return Point(1E20,1E20,1E20);
 }
 Point Point::cross(Point p){
-    return Point(y*p.z-z*p.y,z*p.x-x*p.z,x*p.y-y*p.x);   
+    return Point(y*p.z-z*p.y,z*p.x-x*p.z,x*p.y-y*p.x);
 }
 
 void Point::normalize(){
@@ -23,15 +23,15 @@ Point::Point(double xo, double yo, double zo){
 }
 
 Point Point::operator- (Point p){
-    return Point(x-p.x,y-p.y,z-p.z);   
+    return Point(x-p.x,y-p.y,z-p.z);
 }
 
 Point Point::operator*(double s){
-    return Point(x*s,y*s,z*s);   
+    return Point(x*s,y*s,z*s);
 }
 
 Point Point::operator+(Point p){
-    return Point(p.x+x,p.y+y,p.z+z);   
+    return Point(p.x+x,p.y+y,p.z+z);
 }
 
 bool Point::operator < (Point p){
@@ -40,7 +40,7 @@ bool Point::operator < (Point p){
 
 // Dot product
 double Point::operator* (Point p){
-    return x*p.x+y*p.y+z*p.z;   
+    return x*p.x+y*p.y+z*p.z;
 }
 
 double Point::length(){
@@ -59,9 +59,9 @@ Ray::Ray(Point po, Point vo){
 Ray Ray::reflect(Point normal, Point m){
     Ray ret;
     double tmp = -(normal*v);
-    
+
     Point vo = v+(normal*tmp*2.0);
-    
+
     Point p = Point(m.x,m.y,m.z);
     return Ray(p,vo);
 }

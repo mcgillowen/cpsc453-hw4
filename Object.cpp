@@ -1,5 +1,5 @@
 #include "Object.h"
-
+#include <iostream>
 
 inline bool solveQuadratic(const float &a,
                         const float &b,
@@ -46,28 +46,38 @@ Point Triangle::getIntersection(Ray r){
 	// RETURN THE POINT OF INTERSECTION FOR THIS TRIANGLE.
     float t, u, v;
 
-    Point side1, side2;
+    Point side1, side2, side3;
     Point pVec, qVec, tVec;
 
     side1 = p2-p1;
     side2 = p3-p1;
+    side3 = r.p - p1;
 
-    pVec = r.v.cross(side1);
-    float det = side2 * pVec;
+    //pVec = r.v.cross(side1);
+    float det = side1.cross(side2) * r.v;//(r.v * -1.0);
 
     float invDet = 1 / det;
 
-    tVec = r.p - p1;
-    u = (tVec * pVec) * invDet;
+    //tVec = r.p - p1;
+    //u = (tVec * pVec) * invDet;
+    u = (side3.cross(side2) * (r.v)) * (invDet);
+    //std::cout << "u" << u << std::endl;
     if (u < 0 || u > 1) return Point::Infinite();
 
-    qVec = tVec.cross(side2);
-    v = (r.v * qVec) * invDet;
+    //qVec = tVec.cross(side2);
+    //v = (r.v * qVec) * invDet;
+    v = (side1.cross(side3) * (r.v)) * (invDet);
+    //std::cout << "v" << v << std::endl;
     if (v < 0 || v > 1) return Point::Infinite();
 
-    t = (side2 * qVec) * invDet;
+    if (u + v >= 1) return Point::Infinite();
 
-    Point intersection = r.p + r.v * t;
+    //t = ((side2 * qVec) * invDet) * (-1);
+    t = (side1.cross(side2) * side3) * (-1.0 * invDet);
+    if (t < 0) return Point::Infinite();
+
+    //Point intersection = r.p + r.v * t;
+    Point intersection = p1 + side1 * u + side2 * v;
 
     return intersection;
 }
