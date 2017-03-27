@@ -52,28 +52,25 @@ Point Triangle::getIntersection(Ray r){
     side1 = p2-p1;
     side2 = p3-p1;
     side3 = r.p - p1;
-
-    //pVec = r.v.cross(side1);
-    float det = side1.cross(side2) * r.v;//(r.v * -1.0);
+    //float det = side1.cross(side2) * r.v;//(r.v * -1.0);
+    float det = r.v.cross(side2) * side1;
 
     float invDet = 1 / det;
 
-    //tVec = r.p - p1;
-    //u = (tVec * pVec) * invDet;
-    u = (side3.cross(side2) * (r.v)) * (invDet);
+    //u = (side3.cross(side2) * (r.v)) * (invDet);
+    u = (r.v.cross(side2) * side3) * (invDet);
     //std::cout << "u" << u << std::endl;
     if (u < 0 || u > 1) return Point::Infinite();
 
-    //qVec = tVec.cross(side2);
-    //v = (r.v * qVec) * invDet;
-    v = (side1.cross(side3) * (r.v)) * (invDet);
+    //v = (side1.cross(side3) * (r.v)) * (invDet);
+    v = (side3.cross(side1) * r.v) * (invDet);
     //std::cout << "v" << v << std::endl;
     if (v < 0 || v > 1) return Point::Infinite();
 
     if (u + v >= 1) return Point::Infinite();
 
-    //t = ((side2 * qVec) * invDet) * (-1);
-    t = (side1.cross(side2) * side3) * (-1.0 * invDet);
+    //t = (side1.cross(side2) * side3) * (-1.0 * invDet);
+    t = (side3.cross(side1) * side2) * (invDet);
     if (t < 0) return Point::Infinite();
 
     //Point intersection = r.p + r.v * t;
