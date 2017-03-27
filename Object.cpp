@@ -45,10 +45,31 @@ Point Triangle::getIntersection(Ray r){
 	// YOUR INTERSECTION CODE HERE.
 	// RETURN THE POINT OF INTERSECTION FOR THIS TRIANGLE.
     float t, u, v;
-    
 
+    Point side1, side2;
+    Point pVec, qVec, tVec;
 
-    return Point::Infinite();
+    side1 = p2-p1;
+    side2 = p3-p1;
+
+    pVec = r.v.cross(side1);
+    float det = side2 * pVec;
+
+    float invDet = 1 / det;
+
+    tVec = r.p - p1;
+    u = (tVec * pVec) * invDet;
+    if (u < 0 || u > 1) return Point::Infinite();
+
+    qVec = tVec.cross(side2);
+    v = (r.v * qVec) * invDet;
+    if (v < 0 || v > 1) return Point::Infinite();
+
+    t = (side2 * qVec) * invDet;
+
+    Point intersection = r.p + r.v * t;
+
+    return intersection;
 }
 
 Point Triangle::getNormal(Point p){
