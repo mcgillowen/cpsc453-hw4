@@ -34,26 +34,51 @@ Color RayTracer::trace(Ray r, int depth){
 
   // YOUR CODE FOR RECURSIVE RAY TRACING GOES HERE
 
+  if (depth > maxdepth) return rad;
+
   Object *obj = this->intersect(r);
   if (obj == NULL) return rad;
 
   Point pt = obj->getIntersection(r);
   Point normal = obj->getNormal(pt);
 
-  rad.r = normal.x;
-  rad.g = normal.y;
-  rad.b = normal.z;
+  Ray reflected = r.reflect(normal, pt);
+
+  Material *mat = obj->getMaterial();
+
+  Color shadedColor = this->Phong(normal, pt, r, mat, obj);
+
+  rad = shadedColor + this->trace(reflected, depth + 1);
 
   return rad;
 }
 
 // Local Phong illumination at a point.
 Color RayTracer::Phong(Point normal,Point p, Ray r, Material * m, Object * o){
-  Color ret = Color(0.0, 0.0, 0.0, 0.0);
+  Color ret = Color(0.5, 0.5, 0.5, 1.0);
+
+  ret = ret + m->getAmbient(p);
+
+  int count = scene->lights.size();
+
+  Point current = Point::Infinite();
 
   // YOUR CODE HERE.
   // There is ambient lighting irrespective of shadow.
   // Specular-diffuse lighting only if the point is not in shadow
+
+  while ((current = scene->getNextLight()) < Point::Infinite() && count > 0) {
+    count--;
+    Point lightVector = current - p;
+    Ray lightRay = Ray(p, lightVector);
+    Object * obj = this->intersect(lightRay);
+    if (obj != NULL) {
+      continue;
+    }
+
+    // calculate phong shading here
+
+  }
 
   // Remember, you need to account for all the light sources.
 

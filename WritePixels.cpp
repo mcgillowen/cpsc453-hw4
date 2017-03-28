@@ -17,7 +17,7 @@ RayTracer * rt;
 
 int main(){
     // Test scene with max depth of 4 and sampling of 1
-    rt = new RayTracer(Scene::initTestScene(width),12,4);
+    rt = new RayTracer(Scene::initTestScene(width),6,4);
     float pixels[width][height][4];
     for(int ctr = 0; ctr < height*width; ctr++){
     	int i = ctr % width;
@@ -43,5 +43,5 @@ int main(){
 	    }
 	}
 	testimage.close();
-    return 0;   
+    return 0;
 }

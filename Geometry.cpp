@@ -56,12 +56,19 @@ Ray::Ray(Point po, Point vo){
     v.normalize();
 }
 
-Ray Ray::reflect(Point normal, Point m){
-    Ray ret;
-    double tmp = -(normal*v);
+Ray Ray::reflect(Point normal, Point m) {
 
-    Point vo = v+(normal*tmp*2.0);
+    Point v0 = v - normal * 2 * (v * normal);
 
-    Point p = Point(m.x,m.y,m.z);
-    return Ray(p,vo);
+    return Ray(Point(m.x, m.y, m.z), v0);
 }
+
+// Ray Ray::reflect(Point normal, Point m){
+//     Ray ret;
+//     double tmp = -(normal*v);
+
+//     Point vo = v+(normal*tmp*2.0);
+
+//     Point p = Point(m.x,m.y,m.z);
+//     return Ray(p,vo);
+// }
