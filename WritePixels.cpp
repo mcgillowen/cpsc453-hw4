@@ -17,12 +17,13 @@ RayTracer * rt;
 
 int main(){
     // Test scene with max depth of 4 and sampling of 1
-    rt = new RayTracer(Scene::initTestScene(width),6,4);
+    rt = new RayTracer(Scene::initTestScene(width),8,4);
     float pixels[width][height][4];
     for(int ctr = 0; ctr < height*width; ctr++){
     	int i = ctr % width;
     	int j = ctr / width;
     	Color rad = rt->calculate(i,j);
+        //std::cout << i * j << " of " << height * width << std::endl;
     	pixels[i][j][0] = rad.r; //Red
     	pixels[i][j][1] = rad.g; //Green
     	pixels[i][j][2] = rad.b; //Blue

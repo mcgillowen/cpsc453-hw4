@@ -46,22 +46,28 @@ Color RayTracer::trace(Ray r, int depth){
 
   Material *mat = obj->getMaterial();
 
-  Color shadedColor = this->Phong(normal, pt, r, mat, obj);
+  Color shadedColor = rad + this->Phong(normal, pt, r, mat, obj);
 
-  rad = shadedColor + this->trace(reflected, depth + 1);
-
-  return rad;
+  if (mat->type == REFLECTIVE) {
+    rad = shadedColor + this->trace(reflected, depth + 1) * mat->kr;
+    } else {
+    rad = shadedColor;
+}
+    rad.clamp(1.0);
+  return rad ;
 }
 
 // Local Phong illumination at a point.
 Color RayTracer::Phong(Point normal,Point p, Ray r, Material * m, Object * o){
-  Color ret = Color(0.5, 0.5, 0.5, 1.0);
+  Color ret = Color(0.0, 0.0, 0.0, 0.0);
 
   ret = ret + m->getAmbient(p);
 
   int count = scene->lights.size();
 
   Point current = Point::Infinite();
+
+  int specularDegree = 1;
 
   // YOUR CODE HERE.
   // There is ambient lighting irrespective of shadow.
@@ -73,15 +79,35 @@ Color RayTracer::Phong(Point normal,Point p, Ray r, Material * m, Object * o){
     Ray lightRay = Ray(p, lightVector);
     Object * obj = this->intersect(lightRay);
     if (obj != NULL) {
-      continue;
+        Point pt = obj->getIntersection(lightRay);
+        Point origin = Point();
+        double distanceIntersection = pt.length();
+        double distanceLight = current.length();
+        if (distanceIntersection < distanceLight) {
+            continue;
+        }
     }
 
     // calculate phong shading here
+    Ray reflectedLight = lightRay.reflect(normal, p);
+
+    double diffuse = std::max(lightVector * normal, 0.0);
+
+    double specular = std::max(reflectedLight.v * r.v, 0.0);
+
+    for (int i = 0; i < specularDegree; i++) {
+        specular = specular * specular;
+    }
+
+
+    ret = ret + m->getDiffuse(p) * diffuse;
+    ret = ret + m->getSpecular(p) * specular;
+
 
   }
 
   // Remember, you need to account for all the light sources.
-
+  ret.clamp(1.0);
   return ret;
 }
 

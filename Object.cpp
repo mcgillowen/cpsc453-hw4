@@ -39,6 +39,7 @@ Sphere::Sphere(Point p, double r){
     isLight = false;
 }
 #define EPS 1E-6
+#define MIX 1E-3
 
 Point Triangle::getIntersection(Ray r){
 
@@ -69,7 +70,10 @@ Point Triangle::getIntersection(Ray r){
     t = (side3.cross(side1) * side2) * (invDet);
     if (t < 0) return Point::Infinite();
 
-    Point intersection = p1 + side1 * u + side2 * v;
+    t = t - MIX;
+
+    //Point intersection = p1 + side1 * u + side2 * v;
+    Point intersection = r.p + r.v * t;
 
     return intersection;
 }
@@ -104,6 +108,8 @@ Point Sphere::getIntersection(Ray r){
         t0 = t1; // if t0 is negative, let's use t1 instead
         if (t0 < 0) return Point::Infinite();
     }
+
+    t0 = t0 - MIX;
 
     Point offset = Point(r.v.x * t0, r.v.y * t0, r.v.z*t0);
 
