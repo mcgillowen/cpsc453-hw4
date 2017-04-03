@@ -1,24 +1,18 @@
-/*
-*   Skeleton code for CPSC 453 Assignment 4
-*
-*   Based on code written by:
-*   Karl Augsten   
-*/
+# CPSC453-HW4
 
-To compile, type:
+To compile run `make all`
 
-make all
+To generate images run `./writepixels` and then run convert `convert -size 512x512 -depth 8 TestScene.rgb File.png`
 
-This will yield an executable called writepixels,
-which writes the rendered image to TestScene.rgb which you will have to 
-convert to .png using the command:
+Commandline arguments for writepixels are:
+- first argument: the maxdepth, default to 8
+- second argument: the sampling, default to 4
+- third argument: use personal scene, anything will do, defaults to the test scene, Cornell Box
 
-convert -size 512x512 -depth 8 TestScene.rgb File.png
+Examples:
+- ./writepixels 12 4 1, will generate the personal scene, with maxdepth of 12, sampling of 4
+- ./writepixels, will generate the test scene, with maxdepth of 8, sampling of 4
 
-The size of the image can be controlled within the file WritePixels.cpp
-
-The skeleton code is structured so that it should compile and yield a black 
-image when you run the executable. Please go through the code and write
-the missing code related to tracing rays, lighting and computing intersections.
-
-
+Features implemented:
+- Reflection/Mirroring
+- Diffuse lighting

@@ -34,8 +34,6 @@ Color RayTracer::trace(Ray r, int depth){
 
   // YOUR CODE FOR RECURSIVE RAY TRACING GOES HERE
 
-  if (depth > maxdepth) return rad;
-
   Object *obj = this->intersect(r);
   if (obj == NULL) return rad;
 
@@ -46,14 +44,15 @@ Color RayTracer::trace(Ray r, int depth){
 
   Material *mat = obj->getMaterial();
 
-  Color shadedColor = rad + this->Phong(normal, pt, r, mat, obj);
+  rad = rad + this->Phong(normal, pt, r, mat, obj) * mat->kd;
+
+  if (depth > maxdepth) return rad;
 
   if (mat->type == REFLECTIVE) {
-    rad = shadedColor + this->trace(reflected, depth + 1) * mat->kr;
-    } else {
-    rad = shadedColor;
-}
-    rad.clamp(1.0);
+    rad = rad + this->trace(reflected, depth + 1) * mat->kr;
+  }
+
+  rad.clamp(1.0f);
   return rad ;
 }
 
@@ -76,6 +75,7 @@ Color RayTracer::Phong(Point normal,Point p, Ray r, Material * m, Object * o){
   while ((current = scene->getNextLight()) < Point::Infinite() && count > 0) {
     count--;
     Point lightVector = current - p;
+    lightVector.normalize();
     Ray lightRay = Ray(p, lightVector);
     Object * obj = this->intersect(lightRay);
     if (obj != NULL) {

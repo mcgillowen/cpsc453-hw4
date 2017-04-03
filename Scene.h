@@ -20,7 +20,7 @@ class Scene {
     // Currently this ray tracer only supports square N x N images
     // where N is the number of pixels in one direction.
     int N;
-    
+
 
     // A container to hold objects
     vector<Object *> objects;
@@ -33,7 +33,7 @@ public:
 
     Color background;
     Scene(){
-        background = Color(0.0,0.0,0.0,1.0);   
+        background = Color(0.0,0.0,0.0,1.0);
     }
     Scene(Point*,Point*,double,int);
     void startIteration(void);
@@ -46,7 +46,8 @@ public:
     void setDirectionVector(Point *);
     Ray makeRay(double,double);
     static Scene* initTestScene(int);
+    static Scene* initTestScene2(int);
     // can add your own scene here.
-    
+
 };
 
